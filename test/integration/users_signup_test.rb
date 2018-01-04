@@ -23,4 +23,25 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     
   end 
 
+  test "signup success" do 
+
+    user_hash = {
+      name: "Valid User",
+      email: "user@valid.com",
+      password: "foobar123",
+      password_confirmation: "foobar123"
+    }
+
+    get signup_path
+
+    assert_difference 'User.count', 1 do
+      post users_path, params: { user: user_hash }
+    end 
+
+    follow_redirect! 
+    assert_template 'users/show'
+    assert_not flash.empty?
+  
+  end
+
 end
